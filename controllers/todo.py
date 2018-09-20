@@ -1,4 +1,6 @@
-from apistar import Route
+import json
+
+from apistar import Route, http
 
 from repositories.todo import TodoRepository
 
@@ -8,8 +10,9 @@ todo_repository = TodoRepository()
 #
 #  Create a new resource
 #
-def create_todo(todo_payload):
-    return todo_repository.create_todo(todo_payload=todo_payload)
+def create_todo(request: http.Request):
+    json_body = request.body.decode('utf-8')
+    return todo_repository.create_todo(todo_payload=json.loads(json_body))
 
 
 #
