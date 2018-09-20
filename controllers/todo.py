@@ -1,7 +1,6 @@
-import json
-
 from apistar import Route, http
 
+from models.todo import Todo
 from repositories.todo import TodoRepository
 
 todo_repository = TodoRepository()
@@ -12,14 +11,15 @@ todo_repository = TodoRepository()
 #
 def create_todo(request: http.Request):
     json_body = request.body.decode('utf-8')
-    return todo_repository.create_todo(todo_payload=json.loads(json_body))
+    todo = Todo.from_json(s=json_body, infer_missing=True)
+    return todo_repository.create_todo(todo=todo).to_json()
 
 
 #
 #  Get a resource by its id
 #
 def get_todo(todo_id):
-    return todo_repository.get_todo_by_id(todo_id=todo_id)
+    return todo_repository.get_todo_by_id(todo_id=todo_id).to_json()
 
 
 routes = [
